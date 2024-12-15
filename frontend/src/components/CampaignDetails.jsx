@@ -1,7 +1,78 @@
 // CampaignDetailsPage.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getCampaignById, donateToCampaign } from "../services/apiService"; // Assuming API calls are in apiService.js
 
-const CampaignDetails = ({ campaign }) => {
+const CampaignDetails = () => {
+  const { id } = useParams(); // Get the campaign ID from the URL
+  const [campaign, setCampaign] = useState(null); // Store the campaign details
+  const [loading, setLoading] = useState(true); // Track loading state
+  const [donationAmount, setDonationAmount] = useState(""); // Track donation amount
+
+  useEffect(() => {
+    const fetchCampaign = async () => {
+      try {
+        const response = await getCampaignById(id); // Fetch campaign by ID
+        setCampaign(response.data); // Set campaign data from API
+      } catch (error) {
+        console.error("Failed to fetch campaign:", error);
+      } finally {
+        setLoading(false); // Set loading to false once the data is fetched
+      }
+    };
+
+    fetchCampaign();
+  }, [id]);
+
+  // Handle donation amount input
+  const handleDonationChange = (e) => {
+    setDonationAmount(e.target.value);
+  };
+
+  // Handle "Donate Now" button click
+  const handleDonate = async () => {
+    if (!donationAmount || donationAmount <= 0) {
+      alert("Please enter a valid donation amount.");
+      return;
+    }
+
+    const token = localStorage.getItem("authToken"); // Get the token from localStorage
+    if (!token) {
+      alert("You must be logged in to donate.");
+      return;
+    }
+
+    const donationData = { amount: parseFloat(donationAmount)}; // Data to send to the API
+    try {
+      const response = await donateToCampaign(id, donationData, token); // Call the donate API
+      alert("Thank you for your donation! 🎉");
+      setDonationAmount(""); // Clear the input field
+      setCampaign((prevCampaign) => ({
+        ...prevCampaign,
+        raisedAmount: prevCampaign.raisedAmount + parseFloat(donationAmount),
+      })); // Update the raised amount dynamically
+    } catch (error) {
+      alert("Failed to process the donation. Please try again.");
+      console.error("Donation Error:", error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  if (!campaign) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Campaign not found.
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen py-10 bg-gray-100">
       <div className="max-w-4xl p-8 mx-auto bg-white rounded-lg shadow-lg">
@@ -44,7 +115,7 @@ const CampaignDetails = ({ campaign }) => {
         </div>
 
         {/* Display milestones */}
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <h3 className="text-xl font-semibold">Milestones</h3>
           <ul>
             {campaign.milestones.map((milestone, index) => (
@@ -55,16 +126,21 @@ const CampaignDetails = ({ campaign }) => {
               </li>
             ))}
           </ul>
-        </div>
+        </div> */}
 
         {/* Donation Section */}
         <div className="mt-8">
           <input
             type="number"
+            value={donationAmount}
+            onChange={handleDonationChange}
             className="w-full p-3 border border-gray-300 rounded-lg"
             placeholder="Enter donation amount"
           />
-          <button className="w-full py-3 mt-4 text-white bg-blue-500 rounded-full">
+          <button
+            onClick={handleDonate}
+            className="w-full py-3 mt-4 text-white bg-blue-500 rounded-full hover:bg-blue-600"
+          >
             Donate Now
           </button>
         </div>

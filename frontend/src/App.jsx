@@ -24,7 +24,7 @@ function App() {
             <Route path="/browse-campaigns" element={<BrowseCampaigns />} />
             <Route path="/user-dashboard" element={<UserDashboardPage />} />
             <Route path="/create-campaign" element={<CampaignForm />} />
-            <Route path="/campaign/:id" element={<CampaignDetails />} />
+            <Route path="/campaigns/:id" element={<CampaignDetails />} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/register" element={<RegisterPage />} />{/* Register Route */}
             <Route path="/login" element={<LoginPage />} /> {/* Login Route */}
