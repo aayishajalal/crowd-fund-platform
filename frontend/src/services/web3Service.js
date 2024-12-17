@@ -16,7 +16,8 @@ export const connectWallet = async () => {
       const accounts = await web3Instance.eth.getAccounts();
       userAccount = accounts[0];
 
-      if (!userAccount) throw new Error("No account found. Please connect to MetaMask.");
+      if (!userAccount)
+        throw new Error("No account found. Please connect to MetaMask.");
 
       console.log("Connected account:", userAccount);
 
@@ -77,10 +78,15 @@ export const initContract = async () => {
   const deployedNetwork = CrowdfundingABI.networks[networkId];
 
   if (deployedNetwork) {
-    contractInstance = new web3Instance.eth.Contract(CrowdfundingABI.abi, deployedNetwork.address);
+    contractInstance = new web3Instance.eth.Contract(
+      CrowdfundingABI.abi,
+      deployedNetwork.address
+    );
     console.log("Contract instance initialized:", contractInstance);
   } else {
-    alert("Smart contract not found on this network. Please switch the network.");
+    alert(
+      "Smart contract not found on this network. Please switch the network."
+    );
   }
 };
 
@@ -96,7 +102,13 @@ export const createCampaignOnBlockchain = async (payload) => {
   try {
     console.log("Sending payload to blockchain: ", payload); // ✅ Log payload to debug
     const result = await contractInstance.methods
-      .createCampaign(payload.title, payload.description, payload.goal, payload.deadline, payload.milestoneAmount)
+      .createCampaign(
+        payload.title,
+        payload.description,
+        payload.goal,
+        payload.deadline,
+        payload.milestoneAmount
+      )
       .send({ from: userAccount });
 
     console.log("Campaign created successfully:", result);

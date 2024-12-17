@@ -44,7 +44,12 @@ const CampaignForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // Check if the field needs to be converted to a float
+    const isNumberField = name === "goal" || name === "milestoneAmount";
+    const updatedValue = isNumberField ? parseFloat(value) || "" : value; // Convert to float or keep it as an empty string if NaN
+
+    setFormData({ ...formData, [name]: updatedValue });
   };
 
   const handleSubmit = async (e) => {
@@ -133,7 +138,7 @@ const CampaignForm = () => {
     <div className="flex items-center justify-center min-h-screen p-6 bg-gray-100">
       <div className="w-full p-8 bg-white rounded-lg shadow-lg sm:w-1/2 md:w-1/3">
         <h1 className="mb-6 text-2xl font-bold text-center text-gray-800">
-          Create a Campaign
+          Create campaign
         </h1>
 
         {/* Show error message if any */}
@@ -241,7 +246,7 @@ const CampaignForm = () => {
               disabled={loading}
               className="w-full py-3 font-bold text-white transition-all duration-300 bg-blue-500 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
             >
-              {loading ? "Creating Campaign..." : "Create Campaign"}
+              {loading ? "create campaign..." : "create campaign"}
             </button>
           </div>
         </form>

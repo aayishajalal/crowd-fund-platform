@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import web3 from "../utils/web3";
-import Crowdfunding from "../blockchain/build/contracts/Crowdfunding.json";
+import web3 from "../services/web3Service";
+import Crowdfunding from "../..//build/contracts/Crowdfunding.json";
 import DonationChart from "../components/DonationChart";
 import SocialShare from "../components/SocialShare";
 

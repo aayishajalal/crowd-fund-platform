@@ -11,7 +11,6 @@ import LoginPage from "./pages/LoginPage"; // Added LoginPage
 import HomePage from "./pages/HomePage";
 import Faq from "./components/Faq";
 import UserDashboardPage from "./pages/UserDashboardPage";
-import CrowdfundingPage from "./pages/CrowdfundingPage"; // New crowdfunding page
 
 function App() {
   return (
@@ -27,9 +26,10 @@ function App() {
             <Route path="/create-campaign" element={<CampaignForm />} />
             <Route path="/campaigns/:id" element={<CampaignDetails />} />
             <Route path="/faq" element={<Faq />} />
-            <Route path="/register" element={<RegisterPage />} />{/* Register Route */}
+            <Route path="/register" element={<RegisterPage />} />
+            {/* Register Route */}
             <Route path="/login" element={<LoginPage />} /> {/* Login Route */}
-            <Route path="/crowdfunding" element={<CrowdfundingPage />} /> {/* Crowdfunding Route */}
+            {/* Crowdfunding Route */}
           </Routes>
         </main>
         <Footer />
