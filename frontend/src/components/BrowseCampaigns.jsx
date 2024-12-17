@@ -1,31 +1,38 @@
-// src/pages/BrowseCampaigns.js
-import React, { useState, useEffect } from 'react';
-import CampaignCard from '../components/CampaignCard'; // assuming the CampaignCard component is used to display each campaign
+// src/components/BrowseCampaigns.jsx
+import React, { useState, useEffect } from "react";
+import { getCampaigns } from "../services/web3Service"; // This will call the blockchain
+import CampaignCard from "../components/CampaignCard"; // Assuming you already have this component
 
 const BrowseCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
 
   useEffect(() => {
-    // Fetch campaigns data from API or mock data
     const fetchCampaigns = async () => {
-      // Replace with actual API call
-      const data = [
-        { title: 'Campaign 1', description: 'Description of Campaign 1', image: 'https://via.placeholder.com/300' },
-        { title: 'Campaign 2', description: 'Description of Campaign 2', image: 'https://via.placeholder.com/300' },
-      ];
-      setCampaigns(data);
+      try {
+        const campaignsFromBlockchain = await getCampaigns();
+        setCampaigns(campaignsFromBlockchain);
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      }
     };
+
     fetchCampaigns();
   }, []);
 
   return (
     <div className="py-12 bg-gray-100">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">Browse Campaigns</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {campaigns.map((campaign, index) => (
-            <CampaignCard key={index} campaign={campaign} />
-          ))}
+      <div className="container px-6 mx-auto">
+        <h2 className="mb-12 text-4xl font-bold text-center text-gray-800">
+          Browse Campaigns
+        </h2>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {campaigns.length === 0 ? (
+            <p>No campaigns available</p>
+          ) : (
+            campaigns.map((campaign, index) => (
+              <CampaignCard key={index} campaign={campaign} />
+            ))
+          )}
         </div>
       </div>
     </div>

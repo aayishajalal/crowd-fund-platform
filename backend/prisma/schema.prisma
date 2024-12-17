@@ -3,44 +3,53 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String
-  email    String   @unique
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
-  campaigns Campaign[]
-  donations Donation[]
+  campaigns Campaign[]  // One-to-many relationship with Campaign
+  donations Donation[]  // One-to-many relationship with Donation
 }
 
 model Campaign {
-  id       Int      @id @default(autoincrement())
-  title    String
-  description String
-  goalAmount Float
-  raisedAmount Float @default(0)
-  deadline DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ownerId  Int
-  owner    User     @relation(fields: [ownerId], references: [id])
+  id              Int       @id @default(autoincrement())
+  title           String
+  description     String
+  goalAmount      Float
+  raisedAmount    Float     @default(0)
+  deadline        DateTime
+  status          CampaignStatus @default(ONGOING) // Enum for campaign status
+  milestoneAmount Float     // New field for milestone amount
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  ownerId         Int
+  owner           User      @relation(fields: [ownerId], references: [id], onDelete: Cascade) // Add cascade on delete
 
-  donations Donation[]
+  donations       Donation[] // One-to-many relationship with Donation
 }
 
 model Donation {
-  id       Int      @id @default(autoincrement())
-  amount   Float
-  userId   Int
+  id         Int      @id @default(autoincrement())
+  amount     Float
+  userId     Int
   campaignId Int
-  createdAt DateTime @default(now())
+  createdAt  DateTime @default(now())
 
-  user     User     @relation(fields: [userId], references: [id])
-  campaign Campaign @relation(fields: [campaignId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Add cascade on delete
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade) // Add cascade on delete
+}
+
+// Enum for campaign status
+enum CampaignStatus {
+  ONGOING
+  COMPLETED
+  PAUSED
 }

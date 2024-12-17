@@ -1,16 +1,9 @@
-// src/components/CampaignCard.js
+// src/components/CampaignCard.jsx
 import React from 'react';
 
 const CampaignCard = ({ campaign }) => {
   return (
     <div className="p-4 bg-white rounded shadow-md">
-      {/* Display the campaign image */}
-      {/* <img
-        src={campaign.image}
-        alt={campaign.title}
-        className="object-cover w-full h-48 mb-4 rounded"
-      /> */}
-
       {/* Display campaign title */}
       <h3 className="mb-2 text-xl font-semibold">{campaign.title}</h3>
 

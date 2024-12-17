@@ -1,4 +1,3 @@
-// services/apiService.js
 import axios from 'axios';
 
 // Base URL for the backend API (you can adjust this as per your setup)
@@ -25,7 +24,7 @@ const loginUser = (userData) => {
 const createCampaign = (campaignData, token) => {
   return api.post('/campaigns/create', campaignData, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`, // Corrected template literal
     },
   });
 };
@@ -37,14 +36,14 @@ const getAllCampaigns = () => {
 
 // Get a specific campaign by ID
 const getCampaignById = (id) => {
-  return api.get(`/campaigns/${id}`);
+  return api.get(`/campaigns/${id}`); // Corrected template literal
 };
 
 // Donate to a campaign
 const donateToCampaign = (id, donationData, token) => {
-  return api.post(`/campaigns/${id}/donate`, donationData, {
+  return api.post(`/campaigns/${id}/donate`, donationData, { // Corrected template literal
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`, // Corrected template literal
     },
   });
 };

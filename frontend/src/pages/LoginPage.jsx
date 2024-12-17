@@ -16,19 +16,15 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await loginUser(user);
-      // Assuming the response contains the token
-      const token = response.data.token; // Adjust this according to your API response structure
-
-      // Save token to localStorage
+      const token = response.data.token; // Check this field
       localStorage.setItem("authToken", token);
-      // Show success toast
       toast.success("Login successful!");
-      navigate("/dashboard"); // Navigate to the dashboard after successful login
+      navigate("/user-dashboard"); // Navigate after successful login
     } catch (error) {
-      // Show error toast
       toast.error("Login failed. Please check your credentials.");
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
